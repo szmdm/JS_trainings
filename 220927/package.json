@@ -1,0 +1,19 @@
+{
+  "name": "220927",
+  "version": "1.0.0",
+  "description": "selfie app training",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "example",
+    "data",
+    "selfie"
+  ],
+  "author": "dobry glina",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}

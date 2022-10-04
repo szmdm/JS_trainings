@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js">
+    </script>
+</head>
+
+<body>
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+    <script>
+
+        chartIt()
+
+        async function chartIt() {
+            const data = await getData()
+            // console.log(data)
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.xDataOne,
+                    datasets: [{
+                        label: 'global temeprature ',
+                        data: data.yDataOne,
+                        backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+                        borderColor: ['rgba(255, 99, 12, 1)'],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'global nest ',
+                        data: data.yDataTwo,
+                        backgroundColor: ['pink'],
+                        borderColor: ['blue'],
+                        borderWidth: 1
+                    }]
+                },
+            });
+        }
+
+        // CSV data import
+
+        async function getData() {
+
+            const globalTempData = 'test_temp.csv'
+            const globalMeanData = 'test_means.csv'
+            const dataArr = [globalTempData, globalMeanData]
+
+
+
+            for (let i = 1; i < dataArr.length; i++) {
+
+                let dataElement = dataArr[i]
+                
+                console.log(dataArr.length)
+                const response = await fetch(dataElement)
+                const data = await response.text()
+                // console.log(data)
+
+                const xDataOne = []
+                console.log(xDataOne)
+                const yDataOne = []  
+                console.log(yDataOne)
+                const yDataTwo = []  
+                console.log(yDataTwo)  
+
+                const table = data.split('\n').slice(1)
+                // console.log(table)
+                table.forEach(row => {
+                    const columns = row.split(',')
+                    const year = columns[0]
+
+                    if (i === 0) {
+                        xDataOne.push(year)
+                        const temp = columns[1]
+                        yDataOne.push(parseFloat(temp))
+                    }
+                    else if (i === 1) {
+                        const temp = columns[1]
+                        yDataTwo.push(parseFloat(temp))    
+                    }
+
+                })
+                return { xDataOne, yDataOne, yDataTwo }
+            }
+        }
+    </script>
+</body>
+
+</html>
