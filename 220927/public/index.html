@@ -9,43 +9,6 @@
 </head>
 
 <body>
-    <script>
-        
-        let geoArray = []
-
-        const geo = (event) => {
-            if ('geolocation' in navigator) {
-                console.log('geolocation is available')
-                navigator.geolocation.getCurrentPosition(async position => {
-                    const lat = position.coords.latitude
-                    const lon = position.coords.longitude
-                    const time = event.timeStamp
-                    document.getElementById('lat').textContent = lat
-                    document.getElementById('lon').textContent = lon
-
-                    const data = { lat, lon, time }
-                    const options = {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(data),
-                    };
-                    const response = await fetch("/api", options)
-                    const json = await response.json()
-                    // console.log( json )
-                    
-                    geoArray.push(data)
-                });
-
-            } else {
-                console.log('geolocation is NOT available')
-            }
-        }
-
-        console.log(geoArray)
-
-    </script>
 
     <h1>hello SELFIE app</h1>
     <p>
@@ -54,7 +17,45 @@
     <p>
         Longitude:<span id="lon">&deg;</span>
     </p>
-    <button id="getDirData" onclick="geo(event)">Submit</button>
+    <button id="getDirData">Submit</button>
+
+    <script>
+        let lat, lon;
+        const button = document.getElementById("getDirData");
+        button.addEventListener("click", async (event) => {
+            const data = { lat, lon };
+            const options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            };
+            const response = await fetch("/api", options);
+            const json = await response.json();
+            console.log(json);
+        });
+
+        if ('geolocation' in navigator) {
+            console.log('geolocation is available')
+            navigator.geolocation.getCurrentPosition(async position => {
+                 lat = position.coords.latitude
+                 lon = position.coords.longitude
+
+                document.getElementById('lat').textContent = lat
+                document.getElementById('lon').textContent = lon
+
+                console.log( lat, lon )
+
+            });
+
+        } else {
+            console.log('geolocation is NOT available')
+        }
+
+
+    </script>
+
 </body>
 
 </html>
