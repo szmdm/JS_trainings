@@ -17,13 +17,19 @@
     <p>
         Longitude:<span id="lon">&deg;</span>
     </p>
+    <h2>SURVEY</h2>
+    <p>
+        <label for="vege">Enter your favourite vegetable:</label>
+        <input id="vege" type="text" placeholder="your vege">
+    </p>
     <button id="getDirData">Submit</button>
 
     <script>
+        const button = document.getElementById("getDirData")
         let lat, lon;
-        const button = document.getElementById("getDirData");
         button.addEventListener("click", async (event) => {
-            const data = { lat, lon };
+            const vege = document.getElementById("vege").value
+            const data = { lat, lon, vege };
             const options = {
                 method: "POST",
                 headers: {
@@ -39,13 +45,13 @@
         if ('geolocation' in navigator) {
             console.log('geolocation is available')
             navigator.geolocation.getCurrentPosition(async position => {
-                 lat = position.coords.latitude
-                 lon = position.coords.longitude
+                lat = position.coords.latitude
+                lon = position.coords.longitude
 
                 document.getElementById('lat').textContent = lat
                 document.getElementById('lon').textContent = lon
 
-                console.log( lat, lon )
+                // console.log( lat, lon )
 
             });
 

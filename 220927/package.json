@@ -14,6 +14,7 @@
   "author": "dobry glina",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "nedb": "^1.8.0"
   }
 }
