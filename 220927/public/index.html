@@ -5,24 +5,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 
 <body>
-
-    <h1>hello SELFIE app</h1>
-    <p>
-        Latitude:<span id="lat">&deg;</span>
-    </p>
-    <p>
-        Longitude:<span id="lon">&deg;</span>
-    </p>
-    <h2>SURVEY</h2>
-    <p>
-        <label for="vege">Enter your favourite vegetable:</label>
-        <input id="vege" type="text" placeholder="your vege">
-    </p>
-    <button id="getDirData">Submit</button>
+    <div id="container">
+        <div class="lefColumn">
+            <h1>hello SELFIE app</h1>
+            <p>
+                Latitude:<span id="lat">&deg;</span>
+            </p>
+            <p>
+                Longitude:<span id="lon">&deg;</span>
+            </p>
+            <h2>SURVEY</h2>
+            <p>
+                <label for="vege">Enter your favourite vegetable:</label>
+                <input id="vege" type="text" placeholder="your vege">
+            </p>
+            <button id="getDirData">Submit</button>
+        </div>
+        <div class="rightColumn">
+            <p>My favourite vegetable:</p>
+            <div class="divList">
+                <ul class="vege_list">
+                    <li class="vege_item">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <script>
         const button = document.getElementById("getDirData")
@@ -60,6 +73,41 @@
         }
 
 
+        getData()
+
+        async function getData() {
+            const response = await fetch('/api')
+            const data = await response.json()
+
+            for (item of data) {
+                const divList = document.querySelector('divList')
+                const ul = document.querySelector('.vege_list')
+                const li = document.querySelector('.vege_item')
+
+                const root = document.createElement('div')
+                const vege = document.createElement('div')
+                const geo = document.createElement('div')
+                const date = document.createElement('div')
+
+                vege.textContent = `favourite vege: ${item.vege}`
+                geo.textContent = `${item.lat}, ${item.lon}`
+                const dateString = new Date(item.timestamp).toLocaleString()
+                date.textContent = dateString
+
+                root.append(vege, geo, date)
+
+                listCreate = (listData) => {
+                    const li = document.createElement('li')
+                    li.append(listData)
+                    return li
+                }
+                
+                const list = listCreate(root)
+                ul.append(list)
+
+            }
+            console.log(data)
+        }
     </script>
 
 </body>

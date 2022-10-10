@@ -1,0 +1,26 @@
+#container {
+    display: flex;
+    margin: 0;
+    gap: 30px;
+}
+
+.lefColumn {
+    width: 400px;
+    height: auto;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.rightColumn {
+    width: 400px;
+    height: auto;
+}
+
+li {
+    background: grey;
+    margin: 5px;
+    color: black;
+}
