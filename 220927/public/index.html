@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
     <title>Document</title>
 </head>
 
@@ -36,80 +37,7 @@
             </div>
         </div>
     </div>
-
-    <script>
-        const button = document.getElementById("getDirData")
-        let lat, lon;
-        button.addEventListener("click", async (event) => {
-            const vege = document.getElementById("vege").value
-            const data = { lat, lon, vege };
-            const options = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            };
-            const response = await fetch("/api", options);
-            const json = await response.json();
-            console.log(json);
-        });
-
-        if ('geolocation' in navigator) {
-            console.log('geolocation is available')
-            navigator.geolocation.getCurrentPosition(async position => {
-                lat = position.coords.latitude
-                lon = position.coords.longitude
-
-                document.getElementById('lat').textContent = lat
-                document.getElementById('lon').textContent = lon
-
-                // console.log( lat, lon )
-
-            });
-
-        } else {
-            console.log('geolocation is NOT available')
-        }
-
-
-        getData()
-
-        async function getData() {
-            const response = await fetch('/api')
-            const data = await response.json()
-
-            for (item of data) {
-                const divList = document.querySelector('divList')
-                const ul = document.querySelector('.vege_list')
-                const li = document.querySelector('.vege_item')
-
-                const root = document.createElement('div')
-                const vege = document.createElement('div')
-                const geo = document.createElement('div')
-                const date = document.createElement('div')
-
-                vege.textContent = `favourite vege: ${item.vege}`
-                geo.textContent = `${item.lat}, ${item.lon}`
-                const dateString = new Date(item.timestamp).toLocaleString()
-                date.textContent = dateString
-
-                root.append(vege, geo, date)
-
-                listCreate = (listData) => {
-                    const li = document.createElement('li')
-                    li.append(listData)
-                    return li
-                }
-                
-                const list = listCreate(root)
-                ul.append(list)
-
-            }
-            console.log(data)
-        }
-    </script>
-
+    <script src="sketch.js"></script>
 </body>
 
 </html>
