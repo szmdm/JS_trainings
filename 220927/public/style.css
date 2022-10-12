@@ -24,3 +24,7 @@ li {
     margin: 5px;
     color: black;
 }
+
+.sort_area p {
+    text-transform: uppercase;
+}

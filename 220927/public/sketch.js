@@ -2,7 +2,11 @@ function setup() {
 
     noCanvas()
     const video = createCapture(VIDEO)
-    video.size(320, 240)
+    video.size(160, 120)
+    
+    const rightColumn = querySelector('.rightColumn')
+    rightColumn.append(noCanvas())
+    
 
     const button = document.getElementById("getDirData")
     let lat, lon;
@@ -40,20 +44,29 @@ function setup() {
         console.log('geolocation is NOT available')
     }
 
+    const sortTime = document.querySelector('.sortByTimeBtn')
+    const sortName = document.querySelector('.sortByNameBtn')
+
+    sortTime.addEventListener("click", (event) => {
+        getData(time)
+    })
+
     getData()
 
     async function getData() {
         const response = await fetch('/api')
         const data = await response.json()
-        console.log(data.lenght)
+        
+        // function that generate 4mark ID
+        //
+        // let id4 = () => {
+        //     return Math.floor((1 + Math.random()) * 0x10000)
+        //         .toString(16)
+        //         .substring(1);
+        //   }
 
         for (item of data) {
-            // for (item of data)
-            // for (let i = 0; i < data.lenght; i++ )
-            const divList = document.querySelector('divList')
             const ul = document.querySelector('.vege_list')
-            const li = document.querySelector('.vege_item')
-
             const root = document.createElement('div')
             const vege = document.createElement('div')
             const geo = document.createElement('div')
@@ -61,11 +74,11 @@ function setup() {
             const image = document.createElement('img')
 
             vege.textContent = `favourite vege: ${item.vege}`
-            geo.textContent = `${item.lat}, ${item.lon}`
+            geo.textContent = `${item.lat}°, ${item.lon}°`
             const dateString = new Date(item.timestamp).toLocaleString()
             date.textContent = dateString
-            image.src = item.image64
-            image.alt = "your selfie photo"
+            image.src = "/img/" + item.image_file
+            image.alt = "your selfie photo id:" + item._id
 
             root.append(vege, geo, date, image)
 
