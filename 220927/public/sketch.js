@@ -1,12 +1,14 @@
 function setup() {
 
-    noCanvas()
+
+    // noCanvas()
+
+    
+
     const video = createCapture(VIDEO)
     video.size(160, 120)
-    
-    const rightColumn = querySelector('.rightColumn')
-    rightColumn.append(noCanvas())
-    
+    // video.hide()
+
 
     const button = document.getElementById("getDirData")
     let lat, lon;
@@ -36,7 +38,7 @@ function setup() {
             document.getElementById('lat').textContent = lat
             document.getElementById('lon').textContent = lon
 
-            // console.log( lat, lon )
+            console.log(lat, lon)
 
         });
 
@@ -44,19 +46,41 @@ function setup() {
         console.log('geolocation is NOT available')
     }
 
-    const sortTime = document.querySelector('.sortByTimeBtn')
-    const sortName = document.querySelector('.sortByNameBtn')
 
-    sortTime.addEventListener("click", (event) => {
-        getData(time)
-    })
 
-    getData()
+
 
     async function getData() {
+
+        const sortTime = document.querySelector('.sortByTimeBtn')
+        const sortName = document.querySelector('.sortByNameBtn')
+        const selfies = []
+
+        sortTime.addEventListener('click', event => {
+            sortData((a, b) => b.time - a.time)
+        })
+
+        sortName.addEventListener('click', event => {
+            sortData((a, b) => {
+                if (b.vege > a.vege) return -1
+                else return 1
+            })
+        })
+
+        function sortData(compare) {
+            for (let item of selfies) {
+                item.elt.remove()
+            }
+            selfies.sort(compare)
+            for (let item of selfies) {
+                document.body.append(item.elt)
+            }
+        }
+
+
         const response = await fetch('/api')
         const data = await response.json()
-        
+
         // function that generate 4mark ID
         //
         // let id4 = () => {
@@ -65,22 +89,26 @@ function setup() {
         //         .substring(1);
         //   }
 
+    
+
+        
+
         for (item of data) {
             const ul = document.querySelector('.vege_list')
             const root = document.createElement('div')
             const vege = document.createElement('div')
             const geo = document.createElement('div')
             const date = document.createElement('div')
-            const image = document.createElement('img')
+            const imageElement = document.createElement('img')
 
             vege.textContent = `favourite vege: ${item.vege}`
             geo.textContent = `${item.lat}°, ${item.lon}°`
             const dateString = new Date(item.timestamp).toLocaleString()
             date.textContent = dateString
-            image.src = "/img/" + item.image_file
-            image.alt = "your selfie photo id:" + item._id
+            imageElement.src = "/img/" + item.image_file
+            imageElement.alt = "your selfie photo id:" + item._id
 
-            root.append(vege, geo, date, image)
+            root.append(vege, geo, date, imageElement)
 
             listCreate = (listData) => {
                 const li = document.createElement('li')
@@ -91,8 +119,15 @@ function setup() {
             let list = listCreate(root)
             ul.append(list)
 
+            selfies.push({ elt: root, time: item.timestamp, vege: item.vege })
+
+            
         }
         console.log(data)
     }
+
+    getData()
+
+
 
 }
