@@ -52,9 +52,12 @@ function setup() {
 
     async function getData() {
 
+        const ul = document.querySelector('.vege_list')
+        const li = document.querySelector('.vege_item')
         const sortTime = document.querySelector('.sortByTimeBtn')
         const sortName = document.querySelector('.sortByNameBtn')
         const selfies = []
+        console.log("🚀 ~ file: sketch.js ~ line 60 ~ getData ~ selfies", selfies)
 
         sortTime.addEventListener('click', event => {
             sortData((a, b) => b.time - a.time)
@@ -67,16 +70,18 @@ function setup() {
             })
         })
 
+              
         function sortData(compare) {
             for (let item of selfies) {
                 item.elt.remove()
             }
             selfies.sort(compare)
             for (let item of selfies) {
-                document.body.append(item.elt)
+                li.appendChild(item.elt)
             }
         }
 
+        
 
         const response = await fetch('/api')
         const data = await response.json()
@@ -94,7 +99,7 @@ function setup() {
         
 
         for (item of data) {
-            const ul = document.querySelector('.vege_list')
+            
             const root = document.createElement('div')
             const vege = document.createElement('div')
             const geo = document.createElement('div')
@@ -111,20 +116,21 @@ function setup() {
             root.append(vege, geo, date, imageElement)
 
             listCreate = (listData) => {
-                const li = document.createElement('li')
                 li.append(listData)
                 return li
             }
 
             let list = listCreate(root)
+            console.log(list)
             ul.append(list)
 
             selfies.push({ elt: root, time: item.timestamp, vege: item.vege })
-
+  
             
         }
-        console.log(data)
     }
+
+
 
     getData()
 
